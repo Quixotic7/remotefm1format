@@ -140,10 +140,8 @@ firmware to be **a core in FM1VST**: a submodule under `cores/<Name>` and a glue
 4. `core_<id>_desc.c`: the descriptor (id, version, `source_url`, family, licence, credits, the 14 button names);
 5. a conformance file and a ctest.
 
-Copy the closest family's glue (`core-glue/felucca/core_felucca.c` and `_desc.c` are the documented starting point).
-Glue lives in FM1VST, so a new firmware's glue goes there by a pull request or by asking the maintainer, who scaffolds
-it with RFM1Manager. **How outside authors should contribute glue is not written down yet**: ask in your catalog
-request.
+If FM1VST has no glue for your firmware, the simplest route is to ask to be listed and choose "Please build it
+for me": the maintainer adds the glue with RFM1Manager ([CATALOG-POLICY.md](CATALOG-POLICY.md)).
 
 ### Build one
 

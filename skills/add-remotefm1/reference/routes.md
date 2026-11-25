@@ -58,13 +58,10 @@ The line lives in FM1VST's glue file, not in the author's repository; to change 
 
 ## No glue yet
 
-FM1VST has no glue for the firmware when its repository is not in FM1VST's `.gitmodules`. Options, in order of effort
-for the author:
+FM1VST has no glue for the firmware when its repository is not in FM1VST's `.gitmodules`. Options:
 
-1. **Let the catalog build it.** The maintainer's RFM1Manager detects the firmware's family and scaffolds glue from
-   the closest one. The author just files the catalog request (choose "Please build it for me").
-2. **Port to fm1-base** if the firmware is small or already structured like an fm1-base app (route A, no glue).
-3. **Write glue** in a fork of FM1VST: `core-glue/<family>/core_<id>.cmake`, `core_<id>.c`, `core_<id>_desc.c`
-   (start from the closest family; `core-glue/common/README.md` "Adding a core" lists the steps), and offer it
-   upstream. The route for outside glue contributions is not documented yet; say so and suggest asking in the catalog
-   request. Ask the author before starting this: it is real work.
+1. **Let the catalog build it.** The maintainer's RFM1Manager detects the firmware's family and adds glue from the
+   closest one. The author files the catalog request and chooses "Please build it for me". This is the recommended
+   route; there is nothing else to set up in the author's repository except, optionally, `RemoteFM1Metadata.json`.
+2. **Port to fm1-base** if the firmware is small or already structured like an fm1-base app (route A, no glue). Ask
+   the author first: it is real work.

@@ -6,8 +6,9 @@ Ableton Move offer to download.
 
 ## How to ask
 
-**Open an issue with the form "Add a firmware to the RemoteFM1 catalog"** in this repository
-([new issue](https://github.com/Quixotic7/remotefm1format/issues/new?template=add-firmware.yml)). One issue per
+**Open an issue with the form "Add a firmware to the RemoteFM1 catalog"** in the catalog repository,
+[Quixotic7/RemoteFM1FW](https://github.com/Quixotic7/RemoteFM1FW)
+([new issue](https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=add-firmware.yml)). One issue per
 firmware. You don't have to be the author, but if you aren't, the author is asked before anything is listed.
 
 To change or remove a listing, use the form "Change or remove a catalog listing".
@@ -21,7 +22,8 @@ A firmware is listed when all of these hold:
    binary form** (GPL, MPL, MIT and the like). A repository with no licence cannot be listed.
 3. **It has a stable release**: a GitHub release that is not a draft and not a pre-release, with a plain version tag
    (`v1.2.3`, `name-v1.2.3`). Tags with rc, beta, alpha, pre, preview, dev, nightly, test, snapshot, draft or wip in
-   them are not stable (MGR `lib/util.js`). If you only have betas, say so in the request: the maintainer decides.
+   them are not stable (MGR `lib/util.js`). A stable release is preferred before a firmware is listed; if you only have a beta and want it
+   listed, ask for it in the request and it can be added.
 4. **Everything in it may be redistributed.** Samples, wavetables, fonts, images and presets that are not yours must
    have a licence that allows it. **No third-party preset dumps or raw `.syx` / `.mid` / `.wav` files are bundled**:
    the publish step refuses those file types outright (MGR `lib/publish.js`). Presets compiled into the firmware are
@@ -100,13 +102,12 @@ about anything that might make your firmware hosted-only.
 - Don't change a release's `.rfm1` after publishing it; make a new release.
 - Tell us if your firmware's licence or contents change.
 
-## The maintainer's process (for transparency)
+## What happens to your request
 
-1. Read the request; check the licence and the repository; ask questions on the issue.
-2. Add the firmware with RFM1Manager (it detects the family, uses your `.rfm1` or builds one, and runs every check).
-3. Write or confirm the card; label the issue `accepted`, `needs-info` or `declined`.
-4. Publish the catalog (a dated release, then `current`); close the issue with the firmware's version.
-5. At the next Move catalog build, the firmware appears on the Move too.
+1. The maintainer reads it, checks the licence and the repository, and asks any questions on the issue.
+2. The firmware is added with RFM1Manager: it uses your `.rfm1` or builds one, and runs every check above.
+3. It appears at the next catalog publish, and on the Move at the next Move catalog build. The issue is answered
+   with the result.
 
 Fields the form asks for, and why: the repository and stable release (RFM1Manager's input), the licence and
 third-party material (the rights check), how the `.rfm1` is made (your file or ours), the id, category, subtitle,

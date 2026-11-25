@@ -64,9 +64,9 @@ Follow the route in [reference/routes.md](reference/routes.md). Work in a scratc
   (`cores/<Name>`) at the current commit, configure with `-DFM1_RFM1_ONLY=ON -DFM1_PUBLIC_BUILD=ON
   -DFM1_ONLY_CORES=<id>`, build `rfm1_<id>` and `rfm1_run`.
   - If FM1VST has glue but no `fm1_add_rfm1` line, add `-DFM1_RFM1_EXTRA_CORES=<id>` to try it.
-  - **If FM1VST has no glue for this firmware**, stop and explain the options ([reference/routes.md](reference/routes.md#no-glue-yet)):
-    the catalog maintainer can build it for them from their releases (simplest: just file the catalog request), or
-    glue can be written in a fork of FM1VST and offered upstream. Ask which they want before writing glue.
+  - **If FM1VST has no glue for this firmware**, stop and explain ([reference/routes.md](reference/routes.md#no-glue-yet)):
+    the catalog maintainer builds it from their releases; they file the catalog request and choose "Please build it
+    for me". Still offer `RemoteFM1Metadata.json` (step 5). Don't write FM1VST glue.
 
 ## Step 4: Verify
 
@@ -118,6 +118,6 @@ Tell the author, briefly:
 - that the Move build happens in the catalog, not here;
 - next steps: make a stable release (not a pre-release) so the workflow attaches the file, try it on
   https://remotefm1.com by dropping the file on the page, then ask to be listed with the form
-  https://github.com/Quixotic7/remotefm1format/issues/new?template=add-firmware.yml (policy:
+  https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=add-firmware.yml (policy:
   https://github.com/Quixotic7/remotefm1format/blob/main/docs/CATALOG-POLICY.md). Once listed, each newer stable
   release with an attached `.rfm1` is picked up automatically every night.

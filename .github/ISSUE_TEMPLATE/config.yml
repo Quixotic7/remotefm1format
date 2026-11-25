@@ -1,5 +1,8 @@
 blank_issues_enabled: true
 contact_links:
+  - name: Ask for a firmware to be listed in the RemoteFM1 catalog
+    url: https://github.com/Quixotic7/RemoteFM1FW/issues/new/choose
+    about: Catalog requests, changes and removals are issues in the catalog repository, RemoteFM1FW.
   - name: How to build an .rfm1
     url: https://github.com/Quixotic7/remotefm1format/blob/main/docs/BUILDING.md
     about: The format, the build routes and the tests.
