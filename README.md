@@ -17,14 +17,14 @@ and exact source. The Move runs a compiled form, `.rfm1m`, which the catalog mak
 | [`docs/`](docs/README.md) | **The format documentation.** The file byte for byte ([RFM1-FORMAT.md](docs/RFM1-FORMAT.md)), the host ABI ([HOST-ABI.md](docs/HOST-ABI.md)), every optional capability and which host honours it ([CAPABILITIES.md](docs/CAPABILITIES.md)), `RemoteFM1Metadata.json` ([METADATA.md](docs/METADATA.md)), the Move's `.rfm1m` ([RFM1M.md](docs/RFM1M.md)), how to build ([BUILDING.md](docs/BUILDING.md)) and test ([TESTING.md](docs/TESTING.md), with a worked example run for real). Every fact cites its source repository and commit ([SOURCES.md](docs/SOURCES.md)). |
 | [`skills/add-remotefm1/`](skills/add-remotefm1/SKILL.md) | **A Claude Code skill.** Run it inside your firmware's repository: it finds your build route, builds and checks the `.rfm1`, writes `RemoteFM1Metadata.json`, adds a release workflow, and offers the optional extras one at a time (it asks before adding any). |
 | [`site/`](site/index.html) | **The explainer website**, for people who are slightly technical but not developers: what RemoteFM1 and an RFM1 build are, why make one, what players get, the steps, the extras, and how to get listed. Static HTML and CSS. |
-| [`.github/ISSUE_TEMPLATE/`](.github/ISSUE_TEMPLATE/) and [`docs/CATALOG-POLICY.md`](docs/CATALOG-POLICY.md) | **The catalog request route.** An issue form that collects what the catalog needs, a form for changes and removals, and the policy: what is accepted, what is checked, updates, removals, hosted-only. |
+| [`docs/CATALOG-POLICY.md`](docs/CATALOG-POLICY.md) | **The catalog request route.** The policy (what is accepted, what is checked, updates, removals, hosted-only). Requests are issue forms in the catalog repository, [RemoteFM1FW](https://github.com/Quixotic7/RemoteFM1FW/issues/new/choose). |
 
 ## For firmware authors
 
 1. Read [BUILDING.md](docs/BUILDING.md) (or the website) to see which route fits your firmware.
 2. Build, check with `rfm1_check.py` and `rfm1_run`, and attach the `.rfm1` to a stable release
    ([TESTING.md](docs/TESTING.md)). Or skip this and let the catalog build it for you.
-3. [Ask to be listed](https://github.com/Quixotic7/remotefm1format/issues/new?template=add-firmware.yml).
+3. [Ask to be listed](https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=add-firmware.yml).
 
 ### Install the skill (Claude Code)
 
@@ -39,7 +39,11 @@ Or copy [`skills/add-remotefm1/`](skills/add-remotefm1/) into your firmware repo
 `~/.claude/skills/`). Then, in your firmware's repository, ask Claude to "add RemoteFM1 support", or run
 `/add-remotefm1`.
 
-## Viewing the website locally
+## The website
+
+Published from `site/` by GitHub Pages (`.github/workflows/pages.yml`) at https://quixotic7.github.io/remotefm1format/.
+
+### Viewing it locally
 
 ```sh
 python3 -m http.server 8000 --directory site
@@ -57,3 +61,7 @@ This repository describes; it does not define. The tools and hosts it documents 
 [remoteFM14Move](https://github.com/Quixotic7/remoteFM14Move) (the Move host) and
 [fm1-base](https://github.com/charlesvestal/fm1-base). When the code changes, [SOURCES.md](docs/SOURCES.md) says which
 commits these docs were checked against.
+
+## Licence
+
+[MPL-2.0](LICENSE).
