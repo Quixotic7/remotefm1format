@@ -13,5 +13,6 @@
     "rfm1",
     "firmware",
     "webassembly"
-  ]
+  ],
+  "license": "MPL-2.0"
 }
