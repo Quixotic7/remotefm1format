@@ -58,7 +58,7 @@ pre code { background: none; padding: 0; }
                    box-shadow: 0 0 8px var(--led); }
 .cap:focus-visible, a:focus-visible, button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 
-.hero { padding: 40px 0 56px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+.hero { padding: 40px 0 56px; display: grid; grid-template-columns: .9fr 1.1fr; gap: 40px; align-items: center; }
 .hero h1 { font: 700 clamp(30px, 5.2vw, 54px)/1.08 var(--title); margin: 0 0 16px; letter-spacing: -.01em; color: #2A0F04; }
 .hero p { font-size: 19px; margin: 0 0 24px; max-width: 34em; color: #3A1606; }
 .hero .ctas { display: flex; gap: 12px; flex-wrap: wrap; }

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RFM1 Firmware Format</title>
-<meta name="description" content="What an .rfm1 build is, why an FM-1 firmware author would make one, and how to get a firmware listed in RemoteFM1.">
+<meta name="description" content="What an .rfm1 build is, how an FM-1 firmware author adds it to their releases, and how anyone can ask for a firmware to be listed in RemoteFM1.">
 <meta name="theme-color" content="#EE7A3C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,7 @@
     <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>RFM1 Format</a>
     <nav class="nav" aria-label="Sections">
       <a class="cap opt" href="#what">What</a>
-      <a class="cap opt" href="#how">How</a>
+      <a class="cap opt" href="#how">Add support</a>
       <a class="cap opt" href="#extras">Extras</a>
       <a class="cap dot" href="#listed">Get listed</a>
       <button class="cap theme-btn" id="theme" type="button" aria-label="Switch light or dark theme">
@@ -35,37 +35,93 @@
       <p>An <b>.rfm1</b> is one small file built from your firmware. With it, people can play your firmware in a web
         browser, on a phone or tablet, in a music app, and on an Ableton Move, without flashing anything.</p>
       <div class="ctas">
-        <a class="cap big light" href="#listed">Get your firmware listed</a>
-        <a class="cap big" href="https://github.com/Quixotic7/remotefm1format/tree/main/docs">Read the format</a>
+        <a class="cap big light" href="#how">Add RemoteFM1 to your firmware</a>
+        <a class="cap big" href="#listed">Ask for a firmware to be listed</a>
       </div>
     </div>
-    <!-- a little FM-1 with the file in its screen -->
-    <svg class="mock" viewBox="0 0 420 260" role="img" aria-label="An FM-1 faceplate whose screen shows yourfw 1.2.0 .rfm1">
-      <rect x="4" y="4" width="412" height="252" rx="26" fill="#924E3A"/>
-      <rect x="4" y="4" width="412" height="246" rx="26" fill="#A9614B"/>
-      <rect x="8" y="8" width="404" height="238" rx="23" fill="#EE7A3C"/>
-      <rect x="148" y="26" width="124" height="124" rx="14" fill="#141210"/>
-      <rect x="156" y="34" width="108" height="108" rx="6" fill="#C9D6EA"/>
-      <rect x="156" y="76" width="108" height="26" fill="#13203A"/>
-      <text x="210" y="94" text-anchor="middle" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="15" fill="#C9D6EA" letter-spacing="1">YOURFW</text>
-      <text x="210" y="62" text-anchor="middle" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="11" fill="#13203A">.RFM1</text>
-      <text x="210" y="124" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" fill="#13203A">v1.2.0</text>
-      <g fill="#1B1715"><circle cx="50" cy="56" r="20"/><circle cx="102" cy="56" r="20"/><circle cx="50" cy="114" r="20"/><circle cx="102" cy="114" r="20"/>
-        <circle cx="318" cy="56" r="20"/><circle cx="370" cy="56" r="20"/></g>
-      <g stroke="#F4EDE6" stroke-width="3.5" stroke-linecap="round"><path d="M50 56V41"/><path d="M102 56l9-11"/><path d="M50 114l-10-11"/><path d="M102 114V99"/><path d="M318 56l10-11"/><path d="M370 56V41"/></g>
-      <g font-family="Chakra Petch, sans-serif" font-weight="700" font-size="10" fill="#FBEDE3" text-anchor="middle">
-        <rect x="300" y="96" width="44" height="26" rx="7" fill="#924E3A"/><text x="322" y="113">PLAY</text>
-        <rect x="352" y="96" width="44" height="26" rx="7" fill="#924E3A"/><text x="374" y="113">REC</text>
+    <!-- an FM-1 with the file in its screen: the real panel layout (FM1VST plugin/PanelComponent.cpp geometry) -->
+    <svg class="mock" viewBox="14 14 876 548" role="img" aria-label="An FM-1, drawn to its real layout: four knobs on the left, the screen showing yourfw v1.2.0 .rfm1, four knobs and twelve buttons on the right, and the keys below">
+      <rect x="22" y="30" width="860" height="522" rx="38" fill="#A9614B"/>
+      <rect x="22" y="22" width="860" height="522" rx="38" fill="#EE7A3C" stroke="#924E3A" stroke-width="1.5"/>
+      <rect x="52" y="306" width="800" height="198" rx="20" fill="#C8613A" stroke="#A9502F"/>
+      <rect x="484" y="162" width="338" height="124" rx="10" fill="#C8613A" stroke="#A9502F"/>
+      <rect x="77" y="243" width="127" height="36" rx="8" fill="#C8613A" stroke="#A9502F"/>
+      <g font-family="Chakra Petch, sans-serif" font-weight="700" font-size="11" fill="#2A0F04" text-anchor="middle" letter-spacing=".5">
+        <text x="95" y="62">MASTER</text>
+        <text x="186.5" y="62">SELECT</text>
+        <text x="95" y="152">PRESETS</text>
+        <text x="186.5" y="152">ALGORITHM</text>
+        <text x="508" y="62">KNOB1</text>
+        <text x="604" y="62">KNOB2</text>
+        <text x="701" y="62">KNOB3</text>
+        <text x="797" y="62">KNOB4</text>
       </g>
-      <circle cx="322" cy="90" r="3" fill="#3BD47A" class="blink"/>
-      <rect x="24" y="166" width="372" height="72" rx="16" fill="#874332"/>
-      <g fill="#924E3A">
-        <rect x="34" y="176" width="22" height="52" rx="6"/><rect x="60" y="176" width="22" height="52" rx="6"/><rect x="86" y="176" width="22" height="52" rx="6"/>
-        <rect x="112" y="176" width="22" height="52" rx="6"/><rect x="138" y="176" width="22" height="52" rx="6"/><rect x="164" y="176" width="22" height="52" rx="6"/>
-        <rect x="190" y="176" width="22" height="52" rx="6"/><rect x="216" y="176" width="22" height="52" rx="6"/><rect x="242" y="176" width="22" height="52" rx="6"/>
-        <rect x="268" y="176" width="22" height="52" rx="6"/><rect x="294" y="176" width="22" height="52" rx="6"/><rect x="320" y="176" width="22" height="52" rx="6"/>
-        <rect x="346" y="176" width="22" height="52" rx="6"/><rect x="372" y="176" width="14" height="52" rx="6"/>
+      <g>
+        <circle cx="95" cy="101" r="21" fill="#1B1715"/><circle cx="95" cy="101" r="12" fill="#2A2522"/><path d="M95 101L89.2 85.0" stroke="#F4EDE6" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="186.5" cy="101" r="21" fill="#1B1715"/><circle cx="186.5" cy="101" r="12" fill="#2A2522"/><path d="M186.5 101L196.3 87.1" stroke="#F4EDE6" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="95" cy="191" r="21" fill="#1B1715"/><circle cx="95" cy="191" r="12" fill="#2A2522"/><path d="M95 191L83.0 179.0" stroke="#F4EDE6" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="186.5" cy="191" r="21" fill="#1B1715"/><circle cx="186.5" cy="191" r="12" fill="#2A2522"/><path d="M186.5 191L186.5 174.0" stroke="#F4EDE6" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="508" cy="101" r="21" fill="#1B1715"/><circle cx="508" cy="101" r="12" fill="#2A2522"/><path d="M508 101L518.9 88.0" stroke="#F4EDE6" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="604" cy="101" r="21" fill="#1B1715"/><circle cx="604" cy="101" r="12" fill="#2A2522"/><path d="M604 101L604.0 84.0" stroke="#F4EDE6" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="701" cy="101" r="21" fill="#1B1715"/><circle cx="701" cy="101" r="12" fill="#2A2522"/><path d="M701 101L690.1 88.0" stroke="#F4EDE6" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="797" cy="101" r="21" fill="#1B1715"/><circle cx="797" cy="101" r="12" fill="#2A2522"/><path d="M797 101L813.0 95.2" stroke="#F4EDE6" stroke-width="3.5" stroke-linecap="round"/>
       </g>
+      <rect x="247" y="59" width="201" height="201" rx="14" fill="#141210"/>
+      <rect x="272" y="84" width="150" height="150" rx="4" fill="#C9D6EA"/>
+      <rect x="272" y="140" width="150" height="38" fill="#13203A"/>
+      <text x="347" y="120" text-anchor="middle" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="16" fill="#13203A">.RFM1</text>
+      <text x="347" y="166" text-anchor="middle" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="22" fill="#C9D6EA" letter-spacing="1">YOURFW</text>
+      <text x="347" y="210" text-anchor="middle" font-family="DM Mono, monospace" font-size="16" fill="#13203A">v1.2.0</text>
+      <g font-family="Chakra Petch, sans-serif" font-weight="700" font-size="9.5" fill="#FBEDE3" text-anchor="middle">
+        <rect x="500" y="177" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="518.0" y="198.5">FX</text>
+        <rect x="554" y="177" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="572.0" y="198.5">SEL</text>
+        <rect x="608" y="177" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="626.0" y="198.5">ENV</text>
+        <rect x="661" y="177" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="679.0" y="198.5">LFO</text>
+        <rect x="715" y="177" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="733.0" y="198.5">EDIT</text>
+        <rect x="768" y="177" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="786.0" y="198.5">GLO</text>
+        <rect x="500" y="231" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="518.0" y="252.5">HOME</text>
+        <rect x="554" y="231" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="572.0" y="252.5">SAVE</text>
+        <rect x="608" y="231" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="626.0" y="252.5">ARP</text>
+        <rect x="661" y="231" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="679.0" y="252.5">SEQ</text>
+        <rect x="715" y="231" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="733.0" y="252.5">PLAY</text>
+        <rect x="768" y="231" width="36" height="36" rx="7" fill="#D96C40" stroke="#A9502F"/><text x="786.0" y="252.5">REC</text>
+        <rect x="87" y="250" width="42" height="22" rx="5" fill="#D96C40" stroke="#A9502F"/><text x="108" y="264.5">OCT-</text>
+        <rect x="153" y="250" width="42" height="22" rx="5" fill="#D96C40" stroke="#A9502F"/><text x="174" y="264.5">OCT+</text>
+      </g>
+      <circle cx="653" cy="222" r="3" fill="#3BD47A" class="blink"/>
+      <g>
+        <rect x="95" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="114" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="143" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="162" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="191" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="210" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="288" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="307" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="336" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="355" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="432" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="451" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="480" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="499" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="529" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="548" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="625" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="644" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="673" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="692" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="769" y="326" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="788" y="346" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="71" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="90" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="119" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="138" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="167" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="186" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="215" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="234" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="264" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="283" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="312" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="331" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="360" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="379" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="408" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="427" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="456" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="475" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="504" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="523" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="553" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="572" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="601" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="620" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="649" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="668" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="697" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="716" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="745" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="764" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+        <rect x="794" y="408" width="42" height="76" rx="21" fill="#D96C40" stroke="#A9502F"/><rect x="813" y="428" width="4" height="36" rx="2" fill="#6E301C"/>
+      </g>
+      <circle cx="262" cy="404" r="2" fill="#A9502F"/>
+      <circle cx="406" cy="404" r="2" fill="#A9502F"/>
+      <circle cx="599" cy="404" r="2" fill="#A9502F"/>
+      <circle cx="743" cy="404" r="2" fill="#A9502F"/>
     </svg>
   </div>
 </header>
@@ -114,7 +170,7 @@
         <div>Browser <em>remotefm1.com</em></div>
         <div>iPhone, iPad <em>app + AUv3</em></div>
         <div>Android <em>app</em></div>
-        <div>Ableton Move <em>built for it by the catalog</em></div>
+        <div>Ableton Move <em>its own .rfm1m</em></div>
       </div>
     </div>
   </div>
@@ -131,8 +187,8 @@
         its own sound and screen.</p></div>
       <div class="card"><h3>On new hardware</h3><p>On an Ableton Move your firmware plays from the Move's pads and
         knobs, and can even take over its screen.</p></div>
-      <div class="card"><h3>Your updates reach people</h3><p>Once you are listed, every new stable release with an .rfm1
-        attached is picked up automatically, overnight.</p></div>
+      <div class="card"><h3>Your updates reach people</h3><p>Once you are listed, every new release with an .rfm1 attached
+        is picked up automatically, overnight.</p></div>
       <div class="card"><h3>Your credit stays on it</h3><p>Your name, licence and a link to the exact source are inside
         the file, and the players show them.</p></div>
       <div class="card"><h3>Your FM-1 build is untouched</h3><p>The .rfm1 is a separate build. The firmware people flash
@@ -143,24 +199,38 @@
 
 <section id="how">
   <div class="wrap">
-    <p class="eyebrow">How it works</p>
-    <h2>Four steps. The last one is ours.</h2>
-    <p class="lead">You can do the first two yourself, or skip them and let the catalog build the file from your
-      release.</p>
+    <p class="eyebrow">For firmware authors</p>
+    <h2>Add RemoteFM1 to your releases.</h2>
+    <p class="lead">Ship two extra files with each release: the .rfm1 for every RemoteFM1 player, and the .rfm1m for
+      the Ableton Move. Your FM-1 firmware itself doesn't change.</p>
     <div class="steps">
-      <div class="card step"><div class="who">You</div><h3>Build</h3><p>Run one build command. Firmwares built on
-        fm1-base have it built in; others use the FM1VST build tools, which already know many firmwares.</p></div>
-      <div class="card step"><div class="who">You</div><h3>Check</h3><p>Two free tools check the file and play it: it
+      <div class="card step"><h3>Build the .rfm1</h3><p>Run one build command. Firmwares built
+        on fm1-base have it built in; others use the FM1VST build tools, which already know many firmwares.</p></div>
+      <div class="card step"><h3>Check it</h3><p>Two free tools check the file and play it: it
         must start, make sound and draw its screen.</p></div>
-      <div class="card step"><div class="who">You</div><h3>Release</h3><p>Attach the file to a normal (not beta) GitHub
-        release. A ready-made workflow can do this for you.</p></div>
-      <div class="card step"><div class="who">Us</div><h3>List</h3><p>Ask to be listed. We check it, add it to the
-        catalog, and build the Move version.</p></div>
+      <div class="card step"><h3>Build the Move version</h3><p>One Docker command turns the
+        .rfm1 into an .rfm1m and checks that it sounds exactly the same. About half a minute.</p></div>
+      <div class="card step"><h3>Release</h3><p>Attach both files to your GitHub release. A
+        ready-made workflow can build and attach them at every release.</p></div>
     </div>
-    <p class="note" style="margin-top:20px">Using Claude Code? The <b>add-remotefm1</b> skill does steps 1 to 3 inside
+    <p class="note" style="margin-top:20px">Using Claude Code? The <b>add-remotefm1</b> skill does all four steps inside
       your firmware's repository and asks you before adding any extras:</p>
     <pre><code>/plugin marketplace add Quixotic7/remotefm1format
 /plugin install remotefm1-format@remotefm1</code></pre>
+    <p class="note" style="margin-top:20px">Then <a href="#listed">ask for your firmware to be listed</a>: a link to
+      your release is all we need.</p>
+    <div style="margin-top:24px">
+      <details><summary>Do I need to change my code?</summary>
+        <p>Usually not. Many firmwares build as they are. The optional extras below are small additions you can make
+          later, one at a time.</p></details>
+      <details><summary>Will it change the firmware people flash on their FM-1?</summary>
+        <p>No. The .rfm1 is a separate build. Your FM-1 firmware stays exactly as it is.</p></details>
+      <details><summary>What do I need to build the Move version?</summary>
+        <p>Docker on a Mac with Apple silicon or an arm64 Linux machine (other computers work, slowly). The release
+          workflow can do it on GitHub's own machines instead. The
+          <a href="https://github.com/Quixotic7/remotefm1format/blob/main/docs/RFM1M.md#building-the-move-version-yourself">Move
+          document</a> has the commands.</p></details>
+    </div>
   </div>
 </section>
 
@@ -290,45 +360,37 @@
 
 <section id="listed">
   <div class="wrap">
-    <p class="eyebrow">Get your firmware listed</p>
-    <h2>Ask once. Updates are automatic.</h2>
+    <p class="eyebrow">For authors and fans</p>
+    <h2>Ask for a firmware to be listed.</h2>
     <div class="listed">
       <div>
-        <p class="lead" style="margin-bottom:20px">The RemoteFM1 catalog is the list players download firmwares from. To
-          be in it, your firmware needs:</p>
+        <p class="lead" style="margin-bottom:20px">The RemoteFM1 catalog is the list players download firmwares from.
+          Anyone can ask for a firmware to be added: its author, or a fan who wants to play it.</p>
         <ul class="check">
-          <li><b>Public source code on GitHub</b> with a licence that lets anyone share it (GPL, MPL, MIT…).</li>
-          <li><b>A normal release</b> with a version number like <code>v1.2.3</code>. A beta can be listed if you ask.</li>
-          <li><b>Only material you may share.</b> Samples, pictures and presets that aren't yours need a licence
-            that allows it. No copied preset dumps.</li>
-          <li><b>It runs:</b> it starts, makes sound and draws its screen. We check this for you.</li>
+          <li><b>Its releases have .rfm1 files:</b> a link is all we need. The firmware is listed exactly as its
+            author made it, and each newer release is picked up overnight.</li>
+          <li><b>It only has FM-1 releases</b> (<code>.fwsc</code>): we may build the .rfm1 ourselves. Because we then
+            make and share a copy of someone else's work, its source code must be public on GitHub with a licence that
+            lets anyone share it (GPL, MPL, MIT…), it needs a normal release like <code>v1.2.3</code>, and everything
+            in it must be shareable: no copied preset dumps. The form asks about these.</li>
         </ul>
         <h3 style="margin-top:28px">What happens next</h3>
-        <p class="note" style="font-size:16px">We read your request, check the licence, and build or take your .rfm1.
-          Your file is used exactly as you made it. Once it is listed, each newer normal release with an .rfm1
-          attached replaces the old one overnight. The Move version follows at the next Move catalog update.</p>
+        <p class="note" style="font-size:16px">We try the firmware in RemoteFM1 and add it to the catalog. If we're not
+          the author, we tell the author. The Move version follows at the next Move catalog update.</p>
       </div>
       <div class="callout">
-        <h3>Ready? Fill in the form.</h3>
-        <p>It asks for your repository, release, licence, a short description and a picture. You don't have to build
-          the file yourself: you can ask us to.</p>
-        <a class="cap big light" href="https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=add-firmware.yml">Ask to be listed</a>
+        <h3>Fill in the form.</h3>
+        <p>It asks for a link to the firmware's release, a short description and a picture. The licence questions
+          are only for firmwares we build ourselves.</p>
+        <a class="cap big light" href="https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=add-firmware.yml">Ask to list a firmware</a>
         <p class="note" style="color:#3A1606;margin:16px 0 0">Read the <a style="color:#2A0F04" href="https://github.com/Quixotic7/remotefm1format/blob/main/docs/CATALOG-POLICY.md">catalog policy</a>
-          for the details: what we check, updates, removals.</p>
+          for the details: updates, removals.</p>
       </div>
     </div>
     <div style="margin-top:32px">
-      <details><summary>Do I need to change my code?</summary>
-        <p>Usually not. Many firmwares build as they are. The optional extras are small additions you can make later,
-          one at a time.</p></details>
-      <details><summary>Will it change the firmware people flash on their FM-1?</summary>
-        <p>No. The .rfm1 is a separate build. Your FM-1 firmware stays exactly as it is.</p></details>
-      <details><summary>Who makes the Ableton Move version?</summary>
-        <p>We do. The Move needs a specially compiled copy; the catalog makes it from your .rfm1 and checks that it
-          sounds exactly the same.</p></details>
       <details><summary>What does "hosted only" mean?</summary>
-        <p>A few firmwares contain material whose rights allow sharing it for download but not shipping it inside an
-          app. Those are offered for download only, built exactly as their authors made them. We decide this with you.</p></details>
+        <p>For firmwares we build ourselves: a few contain material whose rights allow sharing it for download but
+          not shipping it inside an app. Those are offered for download only. We decide this with the author.</p></details>
       <details><summary>How do I remove my firmware, or change its description?</summary>
         <p>Open the <a href="https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=change-listing.yml">change
           or remove form</a>. You can also keep your card text and picture in a file in your repository
