@@ -1,13 +1,14 @@
 ---
 name: add-remotefm1
-description: Add RemoteFM1 support to an M-VAVE FM-1 firmware repository - build its .rfm1 (the WebAssembly host build that remotefm1.com, the RemoteFM1 apps and the Ableton Move run), write RemoteFM1Metadata.json, add a release workflow that attaches the .rfm1, optionally add capabilities (skin, labels, readouts rd1, Move takeover tk1, engine parameters ep1, cpu2, audio in), and verify with rfm1_check and rfm1_run. Use when an FM-1 firmware author asks to "add RemoteFM1 support", "build an .rfm1", "make my firmware run on remotefm1.com / the Move", or "get listed in the RemoteFM1 catalog".
+description: Add RemoteFM1 support to an M-VAVE FM-1 firmware repository - build its .rfm1 (the WebAssembly host build that remotefm1.com, the RemoteFM1 apps and the Ableton Move run) and its Ableton Move version (.rfm1m), write RemoteFM1Metadata.json, add a release workflow that attaches both, optionally add capabilities (skin, labels, readouts rd1, Move takeover tk1, engine parameters ep1, cpu2, audio in), and verify with rfm1_check and rfm1_run. Use when an FM-1 firmware author asks to "add RemoteFM1 support", "build an .rfm1", "make my firmware run on remotefm1.com / the Move", or "get listed in the RemoteFM1 catalog".
 ---
 
 # Add RemoteFM1 (`.rfm1`) support to an FM-1 firmware
 
-You are working inside a **firmware author's own repository**. The goal: their stable GitHub releases carry a
-`<id>-<version>.rfm1` that passes the public checks, so it can be listed in the RemoteFM1 catalog. The Move's
-`.rfm1m` is **never** built here: the catalog maintainer compiles it from the `.rfm1` ([reference/move.md](reference/move.md)).
+You are working inside a **firmware author's own repository**. The goal: their GitHub releases carry
+`<id>-<version>.rfm1` (every RemoteFM1 player) and `<id>-<version>.rfm1m` (the Ableton Move, compiled from that
+`.rfm1`: [reference/move.md](reference/move.md)), so anyone can then ask for the firmware to be listed in the RemoteFM1
+catalog with a link to the release.
 
 The format and tooling are documented at https://github.com/Quixotic7/remotefm1format (`docs/`). The reference files
 next to this skill summarise what you need; fetch the docs for detail.
@@ -21,8 +22,6 @@ next to this skill summarise what you need; fetch the docs for detail.
   repository has a device build you can run, confirm its output is byte-identical before and after.
 - **Never push, tag, create releases, or open issues or pull requests** (here or upstream) without the author's
   explicit yes for that action. Commit locally only if the author wants commits.
-- **Never bundle third-party preset dumps or raw `.syx` / `.mid` / `.wav` files** in a release asset. Presets compiled
-  into the firmware are fine if their licence allows.
 - **Pin tools to commits.** FM1VST's `.rfm1` toolchain is on its branch `rfm1-manager`, not in a release yet: use
   commit `e50e77ec41dedd8d8c041186a7d01978c80570e2` or a later commit of that branch the author picks. FM1VST's own
   docs mention a `v0.7.0` tag; it does not exist.
@@ -39,12 +38,11 @@ Find out, and tell the author in a few lines:
 2. **Is it already in FM1VST?** Check https://github.com/Quixotic7/FM1VST/blob/e50e77ec41dedd8d8c041186a7d01978c80570e2/.gitmodules
    for this repository's URL, and `core-glue/*/core_<id>.cmake` for its `fm1_add_core` / `fm1_add_rfm1` lines. Note
    the core id and the glue folder.
-3. **Licence** (LICENSE / COPYING / LICENSES/ / LICENSING.md) and SPDX id. No licence → stop and tell the author the
-   catalog cannot list it until there is one.
+3. **Licence** (LICENSE / COPYING / LICENSES/ / LICENSING.md) and SPDX id, for the manifest's `license`. No licence
+   file → ask the author what to put there.
 4. **Version source:** where the version string lives and how release tags are named (`v1.2.3`?). The `.rfm1`'s
    version must equal the tag's.
-5. **Existing CI**, existing `RemoteFM1Metadata.json`, existing `.rfm1` release assets.
-6. **Third-party material** (samples, fonts, images, presets): list it for the author.
+5. **Existing CI**, existing `RemoteFM1Metadata.json`, existing `.rfm1` / `.rfm1m` release assets.
 
 ## Step 2: Check the toolchain
 
@@ -65,8 +63,8 @@ Follow the route in [reference/routes.md](reference/routes.md). Work in a scratc
   -DFM1_ONLY_CORES=<id>`, build `rfm1_<id>` and `rfm1_run`.
   - If FM1VST has glue but no `fm1_add_rfm1` line, add `-DFM1_RFM1_EXTRA_CORES=<id>` to try it.
   - **If FM1VST has no glue for this firmware**, stop and explain ([reference/routes.md](reference/routes.md#no-glue-yet)):
-    the catalog maintainer builds it from their releases; they file the catalog request and choose "Please build it
-    for me". Still offer `RemoteFM1Metadata.json` (step 5). Don't write FM1VST glue.
+    the catalog maintainer can build it from their releases: they ask to be listed and choose "Only FM-1 .fwsc
+    files (please build the .rfm1)". Still offer `RemoteFM1Metadata.json` (step 5). Don't write FM1VST glue.
 
 ## Step 4: Verify
 
@@ -101,23 +99,32 @@ test. Full details: [reference/capabilities.md](reference/capabilities.md).
 Write `RemoteFM1Metadata.json` from [reference/metadata-template.json](reference/metadata-template.json): keep only the
 parts the author wants, and keep the `$schema` line so their editor checks it.
 
-## Step 6: The release workflow
+## Step 6: Build the Move version (`.rfm1m`)
+
+Build it from the `.rfm1` of step 3 with remoteFM14Move's build image and the Move catalog's own check (commands in
+[reference/move.md](reference/move.md); needs Docker). Show the author `result.json`: it must say `"ok":true` (built,
+glibc ≤ 2.35, boots and sounds, the same PCM as the wasm3 reference). If Docker is missing, say so and leave this to
+the workflow in step 7. If the check fails, `reason` says why; the `.rfm1` is still fine for the other players, so
+tell the author and go on.
+
+## Step 7: The release workflow
 
 Add `.github/workflows/rfm1.yml` from [reference/workflow-fm1base.yml](reference/workflow-fm1base.yml) (route A) or
-[reference/workflow-fm1vst.yml](reference/workflow-fm1vst.yml) (route B). Fill in the id, paths and submodule
-folder. It runs on a published, non-pre-release GitHub release, builds the `.rfm1` from the tagged commit, checks it,
-and attaches `<id>-<version>.rfm1`. If the repository already has a release workflow, offer to add a job to it
-instead. Validate the YAML (for example `python3 -c 'import yaml,sys; yaml.safe_load(open(sys.argv[1]))' file`) and
-tell the author it will first run at their next release; nothing is pushed by you.
+[reference/workflow-fm1vst.yml](reference/workflow-fm1vst.yml) (route B), and paste the `rfm1m` job from
+[reference/workflow-move-job.yml](reference/workflow-move-job.yml) under its `jobs:`. Fill in the id, paths and
+submodule folder. It runs on a published, non-pre-release GitHub release: the `rfm1` job builds the `.rfm1` from the
+tagged commit, checks it and attaches `<id>-<version>.rfm1`; the `rfm1m` job then builds and checks the Move version
+on GitHub's arm64 runner and attaches `<id>-<version>.rfm1m`. If the repository already has a release workflow, offer
+to add the jobs to it instead. Validate the YAML and tell the author it will first run at their next release; nothing
+is pushed by you.
 
-## Step 7: Hand over
+## Step 8: Hand over
 
 Tell the author, briefly:
 
-- what you added (files, workflow, capabilities) and the `rfm1_check` / `rfm1_run` results;
-- that the Move build happens in the catalog, not here;
-- next steps: make a stable release (not a pre-release) so the workflow attaches the file, try it on
-  https://remotefm1.com by dropping the file on the page, then ask to be listed with the form
+- what you added (files, workflow, capabilities) and the `rfm1_check` / `rfm1_run` / Move `result.json` results;
+- next steps: make a release (not a pre-release) so the workflow attaches both files, try the `.rfm1` on
+  https://remotefm1.com by dropping the file on the page, then ask to be listed with a link to the release:
   https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=add-firmware.yml (policy:
-  https://github.com/Quixotic7/remotefm1format/blob/main/docs/CATALOG-POLICY.md). Once listed, each newer stable
+  https://github.com/Quixotic7/remotefm1format/blob/main/docs/CATALOG-POLICY.md). Once listed, each newer
   release with an attached `.rfm1` is picked up automatically every night.

@@ -1,0 +1,34 @@
+# A second job for .github/workflows/rfm1.yml (either template): after the rfm1 job has attached the .rfm1 to the
+# release, build the Ableton Move version (.rfm1m) from it with remoteFM14Move's own build image and the Move catalog's
+# exact check, and attach it beside the .rfm1. Paste it under `jobs:`, next to `rfm1:`.
+# The commands ran for real on Felucca 1.8.2 (Apple silicon, Docker); this job itself has not run on GitHub yet.
+# ubuntu-24.04-arm is GitHub's free arm64 runner for public repositories; the build image is linux/arm64.
+  rfm1m:
+    needs: rfm1
+    if: github.event_name == 'release'
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 30
+    env:
+      MOVE_REF: v0.4.0                                       # Quixotic7/remoteFM14Move
+      FM1VST_REF: e50e77ec41dedd8d8c041186a7d01978c80570e2   # Quixotic7/FM1VST rfm1-manager: the wasm3 reference
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.event.release.tag_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { repository: Quixotic7/remoteFM14Move, ref: "${{ env.MOVE_REF }}", path: move }
+      - uses: actions/checkout@v4
+        with: { repository: Quixotic7/FM1VST, ref: "${{ env.FM1VST_REF }}", path: fm1vst, fetch-depth: 0 }
+      - name: Build and check the .rfm1m
+        working-directory: move
+        run: |
+          set -euo pipefail
+          mkdir -p ../in
+          gh release download "$TAG" --repo "${{ github.repository }}" --pattern '*.rfm1' --dir ../in
+          F=$(ls ../in/*.rfm1 | head -1)
+          make image inputs FIRMWARES="$F" TEST_FIRMWARES="$F" FM1VST=../fm1vst FM1VST_REF=HEAD
+          docker run --rm -v "$PWD":/w -w /w rfm14move-build make build/tools/rfm1info build/tools/fwrun build/ref/rfm1_run
+          docker run --rm -v "$PWD":/w -w /w rfm14move-build tools/catalog_fw.sh "build/in/$(basename "$F")" out
+          cat out/*/result.json | tee -a "$GITHUB_STEP_SUMMARY"
+          grep -q '"ok":true' out/*/result.json
+      - name: Attach it to the release
+        run: gh release upload "$TAG" move/out/*/files/*.rfm1m --clobber --repo "${{ github.repository }}"
