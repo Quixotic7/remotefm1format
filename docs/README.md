@@ -11,10 +11,10 @@ and RemoteFM1 on the Ableton Move).
 | [HOST-ABI.md](HOST-ABI.md) | the `fm1core` interface a firmware's host build implements |
 | [CAPABILITIES.md](CAPABILITIES.md) | the optional extras: skin, labels, readouts, Move takeover, engine parameters, cpu2, audio in and out, Fantasy CFW, screen reader; and which host honours which |
 | [METADATA.md](METADATA.md) | `RemoteFM1Metadata.json`: your card, skin, labels and target release |
-| [RFM1M.md](RFM1M.md) | the Move's compiled `.rfm1m` (built by the catalog, not by you) |
-| [CATALOG-POLICY.md](CATALOG-POLICY.md) | how to get listed, what is checked, updates, removals, hosted-only |
+| [RFM1M.md](RFM1M.md) | the Move's compiled `.rfm1m`, and how to build it from your `.rfm1` |
+| [CATALOG-POLICY.md](CATALOG-POLICY.md) | how anyone asks for a firmware to be listed, updates, removals, hosted-only |
 | [SOURCES.md](SOURCES.md) | the repositories and commits every fact comes from, and where code and docs disagree |
 
 Quick path: if your firmware is an **fm1-base app**, run `tools/build.py app --rfm1 --release X.Y.Z`; otherwise check
-whether **FM1VST** already has glue for it. Then `rfm1_check.py`, `rfm1_run`, attach the file to a stable release, and
-[ask to be listed](CATALOG-POLICY.md).
+whether **FM1VST** already has glue for it. Then `rfm1_check.py`, `rfm1_run`, build the `.rfm1m` ([RFM1M.md](RFM1M.md)), attach
+both to a release, and [ask to be listed](CATALOG-POLICY.md).

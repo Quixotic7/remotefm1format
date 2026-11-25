@@ -8,7 +8,7 @@ catalog.
 **RemoteFM1** runs firmwares written for the FM-1 inside host apps: remotefm1.com in a browser, RemoteFM1 for iOS
 (and its AUv3), RemoteFM1 for Android, and RemoteFM1 on the Ableton Move. A firmware reaches them as one
 **`.rfm1`** file: the firmware's host build compiled to WebAssembly, with a manifest that names its version, licence
-and exact source. The Move runs a compiled form, `.rfm1m`, which the catalog makes from the `.rfm1`.
+and exact source. The Move runs a compiled form, `.rfm1m`, built from the `.rfm1`.
 
 ## What is here
 
@@ -22,9 +22,17 @@ and exact source. The Move runs a compiled form, `.rfm1m`, which the catalog mak
 ## For firmware authors
 
 1. Read [BUILDING.md](docs/BUILDING.md) (or the website) to see which route fits your firmware.
-2. Build, check with `rfm1_check.py` and `rfm1_run`, and attach the `.rfm1` to a stable release
-   ([TESTING.md](docs/TESTING.md)). Or skip this and let the catalog build it for you.
-3. [Ask to be listed](https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=add-firmware.yml).
+2. Build the `.rfm1`, check it with `rfm1_check.py` and `rfm1_run` ([TESTING.md](docs/TESTING.md)), build the Move
+   version `.rfm1m` from it ([RFM1M.md](docs/RFM1M.md#building-the-move-version-yourself)), and attach both to your
+   release.
+3. [Ask to be listed](https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=add-firmware.yml) with a link to
+   the release.
+
+## Asking for a firmware to be listed
+
+Anyone can ask, the author or a fan: [the form](https://github.com/Quixotic7/RemoteFM1FW/issues/new?template=add-firmware.yml).
+A firmware whose releases have `.rfm1` files only needs a link. One that only has FM-1 releases (`.fwsc`) may be built
+by the catalog maintainer, and then the licence rules in [CATALOG-POLICY.md](docs/CATALOG-POLICY.md) apply.
 
 ### Install the skill (Claude Code)
 

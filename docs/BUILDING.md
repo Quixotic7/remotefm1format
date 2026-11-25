@@ -7,9 +7,12 @@ There are two working routes today. Which one you use depends on how your firmwa
 | an **fm1-base app** (`app.h`, `app.c`, `fm1.toml`) | [A. fm1-base `tools/build.py --rfm1`](#a-fm1-base-apps) | nothing but a release workflow (and optionally `RemoteFM1Metadata.json` for a skin) |
 | anything else (Felucca and its forks, Dinghy, your own HAL…) | [B. FM1VST `fm1_add_rfm1`](#b-fm1vst-fm1_add_rfm1) | a release workflow; your firmware needs FM1VST glue (it may already have it) |
 
-You can also ship nothing and let the catalog build it for you: the maintainer's RFM1Manager detects the firmware's
-family, scaffolds glue from the closest one and builds your stable releases (MGR `README.md` §4). See
-[CATALOG-POLICY.md](CATALOG-POLICY.md).
+Then build the Move version (`.rfm1m`) from the `.rfm1` ([RFM1M.md](RFM1M.md#building-the-move-version-yourself)) and
+attach both to your release.
+
+A firmware that only has FM-1 releases (`.fwsc`) can also be built by the catalog maintainer, whose RFM1Manager
+detects the firmware's family, scaffolds glue from the closest one and builds its stable releases (MGR `README.md`
+§4); anyone can ask for that ([CATALOG-POLICY.md](CATALOG-POLICY.md)).
 
 Either way the result must pass FM1VST's `tools/rfm1_check.py` and boot, sound and draw in `rfm1_run`
 ([TESTING.md](TESTING.md)).
@@ -216,5 +219,3 @@ An `.rfm1` is a binary of your firmware; your licence's rules for binaries apply
 - The file carries the licence texts: yours, the glue's (FM1VST's glue is GPL-3.0-only; fm1-base is MPL-2.0), and the
   Emscripten runtime's (MIT). A GPL firmware's `.rfm1` built with FM1VST includes GPL glue; `built_by` names its
   FM1VST commit.
-- Never bundle third-party preset dumps or raw `.syx` files. Presets compiled into the firmware are fine when their
-  licence allows it ([CATALOG-POLICY.md](CATALOG-POLICY.md)).

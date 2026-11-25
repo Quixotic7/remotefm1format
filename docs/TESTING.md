@@ -87,20 +87,19 @@ The site checks the file before running it (the format's section 7 checks, then 
 
 ### The Move path
 
-Authors don't ship `.rfm1m` ([RFM1M.md](RFM1M.md)); this is to catch problems before the catalog does.
+Build the `.rfm1m` and attach it beside the `.rfm1` ([RFM1M.md](RFM1M.md#building-the-move-version-yourself)).
 
 - [ ] Your firmware is fast enough: `rfm1_run` reports how many times faster than real time it runs on your Mac. The
   Move's A72 is about 3.5× slower than the simulator and the budget is about 2600 µs per 128-frame block on average
   (MOVE `README.md`); a firmware that runs only a few times faster than real time in `rfm1_run` on a Mac may not fit.
   Keep `frame()` cheap.
-- [ ] With Docker: in remoteFM14Move `v0.4.0`, `tools/catalog_fw.sh yourfw.rfm1 out/` is the exact catalog gate
-  (compile, glibc, boot, sound, bit-identical PCM), `make sim-run` the host on a Move simulator with its web page at
-  `http://localhost:7730/`. (Not run for these docs.)
+- [ ] The Move build: `tools/catalog_fw.sh` in remoteFM14Move `v0.4.0` (the exact catalog gate: compile, glibc,
+  boot, sound, bit-identical PCM) gives `"ok":true` and `<id>-<version>.rfm1m`. Run for these docs on Felucca 1.8.2.
+- [ ] Optional: `make sim-run` there runs the host on a Move simulator with its web page at `http://localhost:7730/`.
 - [ ] With readouts, labels or a takeover: check them on the simulator's page or a Move after the catalog lists you.
 
 ### Before you ask to be listed
 
-- [ ] A stable GitHub release (not draft, not pre-release) with the `.rfm1` attached, named `<id>-<version>.rfm1`.
-- [ ] Your licence allows redistribution; third-party material is listed; no raw `.syx` dumps.
+- [ ] A GitHub release (not draft, not pre-release) with `<id>-<version>.rfm1` and `<id>-<version>.rfm1m` attached.
 - [ ] `RemoteFM1Metadata.json` (optional) validates against its schema in your editor.
 - [ ] Open the request form ([CATALOG-POLICY.md](CATALOG-POLICY.md)).

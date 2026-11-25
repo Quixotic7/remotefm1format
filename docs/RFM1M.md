@@ -1,9 +1,35 @@
 # `.rfm1m`: the Ableton Move's compiled form
 
-**Short version for authors: you never build or ship an `.rfm1m`.** You ship an `.rfm1`. Once your firmware is in the
-RemoteFM1 catalog, the maintainer compiles it for the Move, checks that it sounds bit for bit the same, and publishes
-it in the signed Move catalog. Everything below is for understanding and for testing. (MOVE `README.md` "The Move
+**Short version for authors: build the `.rfm1m` from your `.rfm1` and attach it to your release beside it**
+([how](#building-the-move-version-yourself): one Docker command, about half a minute). The Move only runs firmwares
+from the signed Move catalog, which the maintainer builds from the RemoteFM1 catalog; right now that build still
+compiles its own copy from your `.rfm1` and checks that it sounds bit for bit the same. (MOVE `README.md` "The Move
 catalog"; MGR `README.md` "The Move catalog (after a publish)")
+
+## Building the Move version yourself
+
+You need Docker, git and make. On an Apple-silicon Mac or an arm64 Linux machine it runs natively; on x86 Docker
+emulates arm64 and is much slower. The commands use remoteFM14Move's own build image and the exact check the Move
+catalog runs (MOVE `Makefile`, `tools/catalog_fw.sh`):
+
+```sh
+git clone --branch v0.4.0 https://github.com/Quixotic7/remoteFM14Move
+git clone --branch rfm1-manager https://github.com/Quixotic7/FM1VST      # the wasm3 reference the check compares with
+cd remoteFM14Move
+F=/path/to/yourfw-1.2.3.rfm1
+make image inputs FIRMWARES=$F TEST_FIRMWARES=$F FM1VST=../FM1VST FM1VST_REF=HEAD
+docker run --rm -v "$PWD":/w -w /w rfm14move-build make build/tools/rfm1info build/tools/fwrun build/ref/rfm1_run
+docker run --rm -v "$PWD":/w -w /w rfm14move-build tools/catalog_fw.sh build/in/yourfw-1.2.3.rfm1 out
+cat out/*/result.json
+```
+
+`result.json` must say `"ok":true`. The files are in `out/<sha256 of your .rfm1>/files/`: attach
+**`yourfw-1.2.3.rfm1m`** to your release, next to `yourfw-1.2.3.rfm1`. (The `.json`, `.licenses.txt` and skin files
+there are made from the `.rfm1` and need not be attached.) If `ok` is false, `reason` says why: the build failed, the
+object needs a newer glibc than the Move's, it trapped or stayed silent, or its sound differs from the reference.
+
+Run for these docs on Felucca 1.8.2 (FM1VST `e50e77e`, remoteFM14Move `v0.4.0`, Apple silicon): `ok`, the same PCM as
+wasm3, needs glibc 2.17, a 2 MB `felucca-1.8.2.rfm1m`, 28 seconds for the check.
 
 ## What it is
 
