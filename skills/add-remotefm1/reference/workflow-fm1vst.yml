@@ -1,0 +1,62 @@
+# .github/workflows/rfm1.yml for a firmware with FM1VST glue (route B).
+# Builds the .rfm1 from the released commit and attaches it to the release.
+# Replace: FIRMWARE_DIR (the submodule folder FM1VST's .gitmodules uses for this repository, e.g. Felucca)
+#          CORE_ID (the core id, e.g. felucca)
+# Commands as run for real with Felucca 1.8.2 (macOS, emcc 6.0.11); this workflow file itself has not run on GitHub yet.
+name: rfm1
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+permissions:
+  contents: write
+env:
+  FM1VST_REF: e50e77ec41dedd8d8c041186a7d01978c80570e2   # Quixotic7/FM1VST rfm1-manager: the .rfm1 toolchain
+  FIRMWARE_DIR: Felucca
+  CORE_ID: felucca
+jobs:
+  rfm1:
+    if: ${{ github.event_name == 'workflow_dispatch' || !github.event.release.prerelease }}
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - name: FM1VST (the glue and the tools)
+        uses: actions/checkout@v4
+        with:
+          repository: Quixotic7/FM1VST
+          ref: ${{ env.FM1VST_REF }}
+          path: fm1vst
+      - name: This firmware at the release's commit, where FM1VST's glue expects it
+        uses: actions/checkout@v4
+        with:
+          path: fm1vst/cores/${{ env.FIRMWARE_DIR }}
+          submodules: recursive
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.13
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install Pillow fonttools
+      - name: Build and check the .rfm1
+        working-directory: fm1vst
+        run: |
+          set -euo pipefail
+          cmake -S . -B build -DFM1_RFM1_ONLY=ON -DFM1_PUBLIC_BUILD=ON -DFM1_ONLY_CORES="$CORE_ID" \
+                -DCR_PYTHON="$(which python)"
+          cmake --build build --target "rfm1_$CORE_ID" rfm1_run -j4
+          ctest --test-dir build -R "^rfm1_(rd_)?${CORE_ID}\$" --output-on-failure
+          python3 tools/rfm1_check.py build/rfm1/*.rfm1
+          shasum -a 256 build/rfm1/*.rfm1 | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rfm1
+          path: fm1vst/build/rfm1/*.rfm1
+          if-no-files-found: error
+      - name: Attach it to the release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" fm1vst/build/rfm1/${CORE_ID}-*.rfm1 --clobber \
+            --repo "${{ github.repository }}"

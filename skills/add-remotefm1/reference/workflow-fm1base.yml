@@ -1,0 +1,43 @@
+# .github/workflows/rfm1.yml for an fm1-base app (route A).
+# Replace yourfw (the app name in fm1.toml) and firmware/app (the app directory).
+# Trimmed from the rfm1 job of Quixotic7/evilgenius .github/workflows/release.yml, which runs on every release;
+# this trimmed file itself has not run on GitHub yet.
+name: rfm1
+on:
+  release:
+    types: [published]
+permissions:
+  contents: write
+jobs:
+  rfm1:
+    if: ${{ !github.event.release.prerelease }}
+    runs-on: ubuntu-24.04
+    env:
+      FM1_BASE_REF: c8e05997ce970875038156d2bbd69e712eac1543   # charlesvestal/fm1-base, a tested commit
+      FM1VST_REF: e50e77ec41dedd8d8c041186a7d01978c80570e2     # Quixotic7/FM1VST rfm1-manager: rfm1_check / rfm1_skin
+      EMSDK_VERSION: 6.0.13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: { repository: charlesvestal/fm1-base, ref: "${{ env.FM1_BASE_REF }}", path: fm1-base, submodules: recursive }
+      - uses: actions/checkout@v4
+        with: { repository: Quixotic7/FM1VST, ref: "${{ env.FM1VST_REF }}", path: fm1vst, sparse-checkout: tools }
+      - uses: mymindstorm/setup-emsdk@v14
+        with: { version: "${{ env.EMSDK_VERSION }}" }
+      - run: pip install Pillow
+      - name: Build, skin, check
+        env: { TAG: "${{ github.event.release.tag_name }}" }
+        run: |
+          set -euo pipefail
+          V="${TAG#v}"
+          python3 fm1-base/tools/build.py firmware/app --rfm1 --release "$V"
+          mkdir out
+          if [ -f RemoteFM1Metadata.json ]; then
+            python3 -I fm1vst/tools/rfm1_skin.py add "firmware/app/build/yourfw-$V.rfm1" -o "out/yourfw-$V.rfm1" --metadata RemoteFM1Metadata.json
+          else
+            cp "firmware/app/build/yourfw-$V.rfm1" out/
+          fi
+          python3 -I fm1vst/tools/rfm1_check.py "out/yourfw-$V.rfm1"
+      - name: Attach to the release
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: gh release upload "${{ github.event.release.tag_name }}" out/*.rfm1 --clobber --repo "${{ github.repository }}"

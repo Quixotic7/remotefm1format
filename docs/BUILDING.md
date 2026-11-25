@@ -59,6 +59,9 @@ python3 fm1-base/tools/build.py path/to/app --rfm1 --release 1.2.3 # release:  a
   was built.
 - fm1-base does not read `RemoteFM1Metadata.json`. Add a skin afterwards with FM1VST's tool:
   `python3 -I fm1vst/tools/rfm1_skin.py add in.rfm1 -o out.rfm1 --metadata RemoteFM1Metadata.json`.
+- fm1-base's host layer exports only the base set ([RFM1-FORMAT.md](RFM1-FORMAT.md#4-exports)): no live labels,
+  readouts, takeover or other capabilities (BASE `host/rfm1.c`). For those, the firmware needs FM1VST glue (route B;
+  `core-glue/fm1base/` covers fm1-base apps).
 - fm1-base firmwares speak the screen reader protocol through `announce.c` (`fm1.toml` `words`).
 - fm1-base upper-cases a `-suffix` in the version (EG workflow comment); stable releases have none anyway.
 

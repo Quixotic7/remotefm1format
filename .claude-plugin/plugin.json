@@ -1,0 +1,17 @@
+{
+  "name": "remotefm1-format",
+  "version": "0.1.0",
+  "description": "Add RemoteFM1 (.rfm1) support to an FM-1 firmware: build, metadata, release workflow, optional capabilities, checks.",
+  "author": {
+    "name": "Quixotic7"
+  },
+  "homepage": "https://github.com/Quixotic7/remotefm1format",
+  "repository": "https://github.com/Quixotic7/remotefm1format",
+  "keywords": [
+    "fm-1",
+    "remotefm1",
+    "rfm1",
+    "firmware",
+    "webassembly"
+  ]
+}

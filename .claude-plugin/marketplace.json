@@ -1,0 +1,14 @@
+{
+  "name": "remotefm1",
+  "description": "RemoteFM1 tools for FM-1 firmware authors.",
+  "owner": {
+    "name": "Quixotic7"
+  },
+  "plugins": [
+    {
+      "name": "remotefm1-format",
+      "source": "./",
+      "description": "The add-remotefm1 skill: add RemoteFM1 (.rfm1) support to an FM-1 firmware repository."
+    }
+  ]
+}

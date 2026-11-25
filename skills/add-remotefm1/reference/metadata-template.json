@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Quixotic7/RemoteFM1FW/main/docs/RemoteFM1Metadata.schema.json",
+  "schema": 1,
+  "card": {
+    "tag": "Short subtitle, up to 40 characters",
+    "what": "One paragraph, up to 600 characters: what the firmware does and how it feels to play.",
+    "category": "Synth",
+    "site": "https://example.github.io/your-firmware/",
+    "editor": "https://example.github.io/your-firmware/editor/",
+    "port": "YourFW FM-1",
+    "image": "docs/remotefm1-card.png"
+  },
+  "skin": {
+    "background": "art/skin-portrait.png",
+    "landscape": "art/skin-landscape.png",
+    "dim": 0.2,
+    "theme": { "body": "#1B1B22", "key": "#2C2C36", "knob": "#E8E2D0", "led": "#FF7A2F", "bezel": "#0E0E12" }
+  },
+  "labels": {
+    "buttons": { "FX": "DRUMS", "SEL": "TRACK" },
+    "knobs": { "K1": "CUTOF", "K2": "RESO" }
+  }
+}
